@@ -2,53 +2,58 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
 <cc:interface>
     <cc:attribute name="selectedOpentalk" required="true" />
-    <cc:attribute name="updateAction" method-signature="java.lang.String action()" required="true" />
+    <cc:attribute name="updateAction" method-signature="void action()" required="true" />
 </cc:interface>
 
 <cc:implementation>
-    <h:form id="updateForm"> 
-        <h:panelGrid columns="2">
-            <h:outputLabel for="title" value="Tiêu đề: " />
+    <h:form id="updateForm">
+        <p:panelGrid columns="2" style="margin: auto; width: 50%;" styleClass="ui-fluid">
+            <p:outputLabel for="title" value="Tiêu đề:" />
             <h:panelGroup>
-	            <h:inputText id="title" value="#{cc.attrs.selectedOpentalk.title}" required="true">
-	            	<f:validator validatorId="titleValidator"/>
-	            </h:inputText>
-	            <h:message for="title" style="color: red;" />
-            </h:panelGroup>	
-
-            <h:outputLabel for="startTime" value="Bắt đầu: " />
-            <h:panelGroup>
-	            <h:inputText id="startTime" value="#{cc.attrs.selectedOpentalk.startTime}" required="true">
-	                <f:converter converterId="localDateTimeConverter" />
-       	            <f:ajax event="blur" render="startTimeMessage" />
-	            </h:inputText>
-	            <h:message id="startTimeMessage" for="startTime" style="color: red;" />
+                <p:inputText id="title" value="#{cc.attrs.selectedOpentalk.title}" required="true">
+                    <f:validator validatorId="titleValidator"/>
+                </p:inputText>
+                <p:message for="title" />
             </h:panelGroup>
 
-            <h:outputLabel for="endTime" value="Kết thúc: " />
+            <p:outputLabel for="startTime" value="Bắt đầu:" />
             <h:panelGroup>
-	            <h:inputText id="endTime" value="#{cc.attrs.selectedOpentalk.endTime}" required="true">
-	                <f:converter converterId="localDateTimeConverter" />
-	                <f:ajax event="blur" render="endTimeMessage" />
-	            </h:inputText>
-	            <h:message id="endTimeMessage" for="endTime" style="color: red;" />
-	        </h:panelGroup>
+                <p:datePicker id="startTime" value="#{cc.attrs.selectedOpentalk.startTime}" showTime="true"
+                              pattern="yyyy-MM-dd HH:mm" required="true">
+                    <f:converter binding="#{opentalkBean.localDateTimeConverter}" />
+                </p:datePicker>
+                <p:message for="startTime" />
+            </h:panelGroup>
 
-            <h:outputLabel for="status" value="Trạng thái: " />
-            <h:selectOneMenu id="status" value="#{cc.attrs.selectedOpentalk.status}" required="true">
-                <f:selectItem itemValue="scheduled" itemLabel="Scheduled" />
-                <f:selectItem itemValue="ongoing" itemLabel="Ongoing" />
-                <f:selectItem itemValue="completed" itemLabel="Completed" />
-                <f:selectItem itemValue="canceled" itemLabel="Canceled" />
-            </h:selectOneMenu>
-        </h:panelGrid>
+            <p:outputLabel for="endTime" value="Kết thúc:" />
+            <h:panelGroup>
+                <p:datePicker id="endTime" value="#{cc.attrs.selectedOpentalk.endTime}" showTime="true"
+                              pattern="yyyy-MM-dd HH:mm" required="true">
+                    <f:converter binding="#{opentalkBean.localDateTimeConverter}" />
+                </p:datePicker>
+                <p:message for="endTime" />
+            </h:panelGroup>
 
-        <h:commandButton value="Lưu" action="#{cc.attrs.updateAction}">
-            <f:ajax execute="@form" render="updatePanel mainForm" />
-        </h:commandButton>
-    </h:form> 
+            <p:outputLabel for="status" value="Trạng thái:" />
+            <h:panelGroup>
+                <p:selectOneMenu id="status" value="#{cc.attrs.selectedOpentalk.status}" required="true">
+                    <f:selectItem itemValue="scheduled" itemLabel="Scheduled" />
+                    <f:selectItem itemValue="ongoing" itemLabel="Ongoing" />
+                    <f:selectItem itemValue="completed" itemLabel="Completed" />
+                    <f:selectItem itemValue="canceled" itemLabel="Canceled" />
+                </p:selectOneMenu>
+                <p:message for="status" />
+            </h:panelGroup>
+        </p:panelGrid>
+
+        <p:commandButton value="Lưu" action="#{cc.attrs.updateAction}" icon="pi pi-save"
+                         update="@form mainForm updatePanel" styleClass="ui-button-success"
+                         style="display: block; margin: 5px auto 0 auto;" />
+    </h:form>
 </cc:implementation>
 </html>

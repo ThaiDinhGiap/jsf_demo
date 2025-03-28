@@ -38,7 +38,7 @@
 	<dependency>
 	    <groupId>org.primefaces</groupId>
 	    <artifactId>primefaces</artifactId>
-	    <version>12.0.0</version>  <!-- Chọn phiên bản mới nhất -->
+	    <version>12.0.0</version>  
     </dependency>
 	<dependency>
 	    <groupId>javax.persistence</groupId>
@@ -49,14 +49,13 @@
   </dependencies>
 
   <build>
-    <finalName>JSF_Project</finalName>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <finalName>opentalk-management</finalName>
+    <pluginManagement>
       <plugins>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.4.0</version>
         </plugin>
-        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.3.1</version>

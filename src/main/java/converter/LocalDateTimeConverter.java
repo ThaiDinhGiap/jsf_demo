@@ -14,7 +14,7 @@ import javax.faces.application.FacesMessage;
 @FacesConverter(value = "localDateTimeConverter")
 public class LocalDateTimeConverter implements Converter<LocalDateTime> {
     
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
     public LocalDateTime getAsObject(FacesContext context, UIComponent component, String value) {
@@ -23,7 +23,7 @@ public class LocalDateTimeConverter implements Converter<LocalDateTime> {
         try {
             return LocalDateTime.parse(value, FORMATTER);
         } catch (DateTimeParseException e) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Lỗi định dạng!", "Ngày giờ không đúng định dạng yyyy-MM-dd'T'HH:mm.");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Lỗi định dạng!", "Ngày giờ không đúng định dạng yyyy-MM-dd HH:mm.");
             throw new ConverterException(msg);
         }
     }

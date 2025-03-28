@@ -2,58 +2,70 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:comp="http://xmlns.jcp.org/jsf/composite/components">
 <h:head>
     <title>Quản lý OpenTalk</title>
 </h:head>
 <h:body>
-    <h1>Danh sách OpenTalk</h1>
+    <h1 style="text-align: center; display: block;" >Danh sách OpenTalk</h1>
+
     <h:form id="mainForm">
-        <h:dataTable value="#{opentalkBean.all}" var="opentalk" border="1">
-            <h:column>
-                <f:facet name="header">ID</f:facet>
+        <p:dataTable id="opentalkTable" value="#{opentalkBean.all}" var="opentalk" 
+                     paginator="true" rows="2">
+            <p:column headerText="ID" sortBy="#{opentalk.id}">
                 #{opentalk.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Tiêu đề</f:facet>
+            </p:column>
+            <p:column headerText="Tiêu đề" sortBy="#{opentalk.title}">
                 #{opentalk.title}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Bắt đầu</f:facet>
-                #{opentalk.startTime}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Kết thúc</f:facet>
-                #{opentalk.endTime}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Hành động</f:facet>
-                <h:commandButton action="#{opentalkBean.selectForUpdate(opentalk)}" value="Sửa">
-                    <f:ajax execute="@form" render="updatePanel" />
-                </h:commandButton>
-                <h:commandButton action="#{opentalkBean.delete(opentalk)}" value="Xóa">
-                	<f:ajax execute="@form" render="mainForm updatePanel" />
-                </h:commandButton>
-            </h:column>
-        </h:dataTable>
+            </p:column>
+            <p:column headerText="Bắt đầu" sortBy="#{opentalk.startTime}">
+                <h:outputText value="#{opentalk.startTime}">
+                    <f:converter converterId="localDateTimeConverter" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Kết thúc" sortBy="#{opentalk.endTime}">
+                <h:outputText value="#{opentalk.endTime}">
+                    <f:converter converterId="localDateTimeConverter" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Hành động">
+                <p:commandButton value="Sửa" icon="pi pi-pencil"
+                                 action="#{opentalkBean.selectForUpdate(opentalk)}"
+                                 update=":updatePanel" process="@form"/>
+                <p:commandButton value="Xóa" icon="pi pi-trash" styleClass="ui-button-danger"
+                                 action="#{opentalkBean.delete(opentalk)}"
+                                 update=":mainForm :updatePanel"
+                                 process="@form">
+                    <p:confirm header="Xác nhận" message="Bạn có chắc chắn muốn xóa không?" icon="pi pi-info-circle"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
     </h:form>
-    
-	<h:commandButton value="Thêm OpenTalk" action="#{opentalkBean.updateShowAddForm}" style="margin-top: 10px;">
-	    <f:ajax execute="@this" render="addPanel" />
-	</h:commandButton>
-	
-	<h:panelGroup id="addPanel">
-	    <h:panelGroup rendered="#{opentalkBean.showAddForm}">
-	        <comp:addOpentalk newOpentalk="#{opentalkBean.newOpentalk}" 
-	                          addAction="#{opentalkBean.add}" />
-	    </h:panelGroup>
-	</h:panelGroup>
-    
-    <h:panelGroup id="updatePanel">
-        <h:panelGroup rendered="#{not empty opentalkBean.selectedOpentalk}">
-            <comp:updateOpentalk selectedOpentalk="#{opentalkBean.selectedOpentalk}" 
-                                 updateAction="#{opentalkBean.update}" />
+
+	<p:panelGrid columns="1" style="text-align: center; width: 100%;">
+	    <p:commandButton value="Thêm OpenTalk" icon="pi pi-plus"
+	                     action="#{opentalkBean.updateShowAddForm}"
+	                     update=":addPanel"/>
+	</p:panelGrid>
+
+    <h:panelGroup id="addPanel">
+        <h:panelGroup rendered="#{opentalkBean.showAddForm}">
+            <comp:addOpentalk newOpentalk="#{opentalkBean.newOpentalk}"
+                              addAction="#{opentalkBean.add}"/>
         </h:panelGroup>
     </h:panelGroup>
+
+    <h:panelGroup id="updatePanel">
+        <h:panelGroup rendered="#{not empty opentalkBean.selectedOpentalk}">
+            <comp:updateOpentalk selectedOpentalk="#{opentalkBean.selectedOpentalk}"
+                                 updateAction="#{opentalkBean.update}"/>
+        </h:panelGroup>
+    </h:panelGroup>
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Có" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+        <p:commandButton value="Không" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
 </h:body>
 </html>

@@ -4,9 +4,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import model.Opentalk;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 
-@ApplicationScoped
+@Dependent
 public class OpentalkDAO {
     private EntityManager entityManager;
 
@@ -19,6 +19,7 @@ public class OpentalkDAO {
         CriteriaQuery<Opentalk> cq = cb.createQuery(Opentalk.class);
         Root<Opentalk> root = cq.from(Opentalk.class);
         cq.select(root);
+        cq.orderBy(cb.asc(root.get("id")));
         return entityManager.createQuery(cq).getResultList();
     }
 
@@ -54,6 +55,7 @@ public class OpentalkDAO {
 
     public Opentalk updateOpentalk(Opentalk opentalk) {
         try {
+        	checkEntityState(opentalk);
             entityManager.getTransaction().begin();
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaUpdate<Opentalk> update = cb.createCriteriaUpdate(Opentalk.class);
@@ -81,5 +83,15 @@ public class OpentalkDAO {
         cq.select(root).where(cb.equal(root.get("id"), id));
 
         return entityManager.createQuery(cq).getSingleResult();
+    }
+    
+    public void checkEntityState(Opentalk opentalk) {
+        if (entityManager.contains(opentalk)) {
+            System.out.println("Entity đang ở trạng thái Managed");
+        } else if (opentalk.getId() == 0) {
+            System.out.println("Entity đang ở trạng thái Transient");
+        } else {
+            System.out.println("Entity có ID nhưng không được quản lý, có thể là Detached hoặc không tồn tại");
+        }
     }
 }
