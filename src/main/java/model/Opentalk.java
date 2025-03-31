@@ -31,7 +31,15 @@ public class Opentalk {
         this.status = status;
     }
 
-    public int getId() {
+    public Opentalk(Opentalk opentalk) {
+        this.id = opentalk.id;
+        this.title = opentalk.title;
+        this.startTime = opentalk.startTime;
+        this.endTime = opentalk.endTime;
+        this.status = opentalk.status;
+	}
+
+	public int getId() {
         return id;
     }
 
@@ -74,5 +82,12 @@ public class Opentalk {
     @Override
     public String toString() {
         return "Opentalk [id=" + id + ", title=" + title + ", startTime=" + startTime + ", endTime=" + endTime + ", status=" + status + "]";
+    }
+    
+    public void updateFrom(Opentalk opentalk) {
+        this.title = opentalk.title;
+        this.startTime = opentalk.startTime;
+        this.endTime = opentalk.endTime;
+        this.status = opentalk.status;
     }
 }

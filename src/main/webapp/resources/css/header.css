@@ -1,0 +1,15 @@
+.full-width-menu {
+    display: flex !important;
+    justify-content: space-between !important; /* Chia đều khoảng cách */
+    width: 100% !important;
+}
+
+.full-width-menu .ui-menuitem {
+    flex: 1 !important; /* Mỗi menu item sẽ tự động co dãn */
+    text-align: center;
+}
+
+.full-width-menu .ui-menuitem a {
+    display: block;
+    width: 100%;
+}

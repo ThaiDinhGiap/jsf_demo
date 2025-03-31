@@ -3,16 +3,21 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:comp="http://xmlns.jcp.org/jsf/composite/components">
 <h:head>
-    <title>Quản lý OpenTalk</title>
+    <title>OpenTalk</title>
 </h:head>
 <h:body>
+	<ui:include src="header.xhtml"/>
+
     <h1 style="text-align: center; display: block;" >Danh sách OpenTalk</h1>
+    
+    <p:growl id="growl" showDetail="true" life="2000" globalOnly="true" />
 
     <h:form id="mainForm">
         <p:dataTable id="opentalkTable" value="#{opentalkBean.all}" var="opentalk" 
-                     paginator="true" rows="2">
+                     paginator="true" rows="3">
             <p:column headerText="ID" sortBy="#{opentalk.id}">
                 #{opentalk.id}
             </p:column>
@@ -35,7 +40,7 @@
                                  update=":updatePanel" process="@form"/>
                 <p:commandButton value="Xóa" icon="pi pi-trash" styleClass="ui-button-danger"
                                  action="#{opentalkBean.delete(opentalk)}"
-                                 update=":mainForm :updatePanel"
+                                 update=":mainForm :updatePanel growl"
                                  process="@form">
                     <p:confirm header="Xác nhận" message="Bạn có chắc chắn muốn xóa không?" icon="pi pi-info-circle"/>
                 </p:commandButton>
@@ -45,21 +50,24 @@
 
 	<p:panelGrid columns="1" style="text-align: center; width: 100%;">
 	    <p:commandButton value="Thêm OpenTalk" icon="pi pi-plus"
-	                     action="#{opentalkBean.updateShowAddForm}"
+	                     action="#{opentalkBean.showAddForm}"
 	                     update=":addPanel"/>
 	</p:panelGrid>
 
     <h:panelGroup id="addPanel">
         <h:panelGroup rendered="#{opentalkBean.showAddForm}">
             <comp:addOpentalk newOpentalk="#{opentalkBean.newOpentalk}"
-                              addAction="#{opentalkBean.add}"/>
+                              addAction="#{opentalkBean.add}"
+                              cancelAction="#{opentalkBean.cancelAdd()}"/>
         </h:panelGroup>
     </h:panelGroup>
 
     <h:panelGroup id="updatePanel">
         <h:panelGroup rendered="#{not empty opentalkBean.selectedOpentalk}">
             <comp:updateOpentalk selectedOpentalk="#{opentalkBean.selectedOpentalk}"
-                                 updateAction="#{opentalkBean.update}"/>
+            					 editOpentalk="#{opentalkBean.editOpentalk}"
+                                 updateAction="#{opentalkBean.update}"
+                                 cancelAction="#{opentalkBean.cancelUpdate}"/>
         </h:panelGroup>
     </h:panelGroup>
 

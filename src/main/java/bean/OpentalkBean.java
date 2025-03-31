@@ -30,7 +30,7 @@ public class OpentalkBean implements Serializable {
 	private Conversation conversation;
 
 	private List<Opentalk> all;
-	private Opentalk selectedOpentalk, newOpentalk;
+	private Opentalk selectedOpentalk, newOpentalk, editOpentalk;
 	private boolean showAddForm = false;
 
 	public void startConversation() {
@@ -52,6 +52,10 @@ public class OpentalkBean implements Serializable {
 
 	public void setSelectedOpentalk(Opentalk selectedOpentalk) {
 		this.selectedOpentalk = selectedOpentalk;
+	}
+	
+	public Opentalk getEditOpentalk() {
+		return editOpentalk;
 	}
 
 	public Opentalk getNewOpentalk() {
@@ -77,10 +81,10 @@ public class OpentalkBean implements Serializable {
 		return all;
 	}
 
-	public void updateShowAddForm() {
-		showAddForm = !showAddForm;
-		if (showAddForm) {
+	public void showAddForm() {
+		if (!showAddForm) {
 			startConversation();
+			showAddForm = true;
 			newOpentalk = new Opentalk();
 		}
 	}
@@ -89,38 +93,54 @@ public class OpentalkBean implements Serializable {
 		opentalkService.add(newOpentalk);
 		all = opentalkService.getAll();
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Thành công", "Đã thêm OpenTalk mới!"));
-		newOpentalk = new Opentalk();
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Thành công", "Đã thêm OpenTalk mới thành công!"));
+		
+		cancelAdd();
+		return null;
+	}
+	
+	public void cancelAdd() {
+		newOpentalk = null;
 		showAddForm = false;
 		endConversation();
-		return null;
 	}
 
 	public String selectForUpdate(Opentalk opentalk) {
 		this.selectedOpentalk = opentalk;
+		this.editOpentalk = new Opentalk(opentalk);
 		return null;
 	}
 
 	public String update() {
-		if (selectedOpentalk == null) {
+		if (editOpentalk == null) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Lỗi", "Không có dữ liệu để cập nhật!"));
 			return null;
 		}
-		opentalkService.update(selectedOpentalk);
-		all = opentalkService.getAll();
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Thành công", "Cập nhật thành công!"));
-		selectedOpentalk = null;
-		endConversation();
+		
+		if (!selectedOpentalk.equals(editOpentalk)) {
+			selectedOpentalk.updateFrom(editOpentalk);
+			opentalkService.update(selectedOpentalk);
+			all = opentalkService.getAll();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Thành công", "Cập nhật thành công!"));
+		}
+		
+		cancelUpdate();
 		return null;
+	}
+	
+	public void cancelUpdate() {
+	    selectedOpentalk = null;
+	    editOpentalk = null;
+	    endConversation(); 
 	}
 
 	public String delete(Opentalk opentalk) {
 		opentalkService.delete(opentalk.getId());
 		all = opentalkService.getAll();
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Thành công", "Đã xóa OpenTalk!"));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Thành công", "Đã xóa thành cồng!"));
 		return null;
 	}
 
@@ -130,7 +150,6 @@ public class OpentalkBean implements Serializable {
 
 			@Override
 			public LocalDateTime getAsObject(FacesContext context, UIComponent component, String value) {
-				// TODO Auto-generated method stub
 				if (value == null || value.trim().isEmpty())
 					return null;
 
@@ -145,7 +164,6 @@ public class OpentalkBean implements Serializable {
 
 			@Override
 			public String getAsString(FacesContext context, UIComponent component, LocalDateTime value) {
-				// TODO Auto-generated method stub
 				if (value == null) {
 					return "";
 				}
