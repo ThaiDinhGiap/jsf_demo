@@ -3,7 +3,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:custom="http://customcomponents.com/jsf">
 <h:head>
     <title>OpenTalk</title>
 </h:head>
@@ -13,7 +14,7 @@
 
     <h:form>
         <p:panel header="Chào mừng bạn đến với OpenTalk!" style="max-width: 600px; margin: 50px auto;">
-            <h:outputText value="Chào mừng bạn đến với nền tảng OpenTalk! Hãy khám phá ngay." style="display: block; text-align: center; margin-top: 15px;"/>
+            <custom:hello style="display: block; text-align: center; margin-top: 15px;" />
             
 			<p:button value="Khám phá" outcome="index" icon="pi pi-arrow-right"
 			          style="display: block; margin: 20px auto;"/>

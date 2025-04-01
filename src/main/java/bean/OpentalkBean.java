@@ -82,11 +82,10 @@ public class OpentalkBean implements Serializable {
 	}
 
 	public void showAddForm() {
-		if (!showAddForm) {
-			startConversation();
-			showAddForm = true;
-			newOpentalk = new Opentalk();
-		}
+		if (showAddForm) return;
+		startConversation();
+		showAddForm = true;
+		newOpentalk = new Opentalk();
 	}
 
 	public String add() {
