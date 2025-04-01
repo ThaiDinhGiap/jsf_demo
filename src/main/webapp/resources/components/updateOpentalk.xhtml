@@ -27,7 +27,7 @@
             <h:panelGroup>
                 <p:datePicker id="startTime" value="#{cc.attrs.editOpentalk.startTime}" showTime="true"
                               pattern="yyyy-MM-dd HH:mm" required="true">
-                    <f:converter binding="#{opentalkBean.localDateTimeConverter}" />
+                   <f:converter converterId="localDateTimeConverter" />
                 </p:datePicker>
                 <p:message for="startTime" display="text" />
             </h:panelGroup>
@@ -36,7 +36,7 @@
             <h:panelGroup>
                 <p:datePicker id="endTime" value="#{cc.attrs.editOpentalk.endTime}" showTime="true"
                               pattern="yyyy-MM-dd HH:mm" required="true">
-                    <f:converter binding="#{opentalkBean.localDateTimeConverter}" />
+                    <f:converter converterId="localDateTimeConverter" />
                 </p:datePicker>
                 <p:message for="endTime" />
             </h:panelGroup>

@@ -16,10 +16,10 @@
         <p:panelGrid columns="2" style="margin: auto; width: 50%;" styleClass="ui-fluid">
             <p:outputLabel for="title" value="Tiêu đề:" />
             <h:panelGroup>
-	            <p:inputText id="title" value="#{cc.attrs.newOpentalk.title}" required="true">
-	                <f:validator validatorId="titleValidator"/>
+	            <p:inputText id="title" value="#{cc.attrs.newOpentalk.title}" validator="#{opentalkBean.validateTitle}" required="true">
+	                <p:ajax event="blur" process="@this" update="title titleMsg" />
 	            </p:inputText>
-	            <p:message for="title" />
+	            <p:message for="title" id="titleMsg" />
             </h:panelGroup>
 
             <p:outputLabel for="startTime" value="Bắt đầu:" />

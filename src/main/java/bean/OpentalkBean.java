@@ -4,15 +4,21 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import model.Opentalk;
@@ -169,5 +175,24 @@ public class OpentalkBean implements Serializable {
 				return value.format(FORMATTER);
 			}
 		};
+	}
+	
+	public void validateTitle(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+	    if (value == null) {
+	        return;
+	    }
+
+	    String title = value.toString().trim();
+	    
+	    if (title.length() < 5) {
+	        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Lỗi tiêu đề", "Tiêu đề phải có tối thiểu 5 ký tự");
+	        throw new ValidatorException(message);
+	    }
+	    
+	    String capitalizedTitle = Arrays.stream(title.split("\\s+"))
+	            .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase())
+	            .collect(Collectors.joining(" "));
+
+	    ((UIInput) component).setSubmittedValue(capitalizedTitle);
 	}
 }
