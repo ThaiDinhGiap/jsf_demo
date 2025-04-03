@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>OpenTalk Report</title>
+</h:head>
+<h:body>
+    <h:form>
+        <h1>Báo cáo OpenTalk theo trạng thái</h1>
+        <p:chart type="pie" model="#{reportBean.pieModel}" style="width:400px;height:300px;"/>
+    </h:form>
+</h:body>
+</html>

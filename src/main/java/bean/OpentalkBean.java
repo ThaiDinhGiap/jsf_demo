@@ -177,7 +177,17 @@ public class OpentalkBean implements Serializable {
 		};
 	}
 	
-	public void validateTitle(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+	public void capitalizeTitle() {		
+	    String title = newOpentalk.getTitle().trim();
+
+	    String capitalizedTitle = Arrays.stream(title.split("\\s+"))
+	        .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase())
+	        .collect(Collectors.joining(" "));
+
+	    newOpentalk.setTitle(capitalizedTitle);
+	}
+	
+	public void validateTitle(FacesContext context, UIComponent component, Object value) throws ValidatorException {		
 	    if (value == null) {
 	        return;
 	    }
@@ -188,11 +198,5 @@ public class OpentalkBean implements Serializable {
 	        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Lỗi tiêu đề", "Tiêu đề phải có tối thiểu 5 ký tự");
 	        throw new ValidatorException(message);
 	    }
-	    
-	    String capitalizedTitle = Arrays.stream(title.split("\\s+"))
-	            .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase())
-	            .collect(Collectors.joining(" "));
-
-	    ((UIInput) component).setSubmittedValue(capitalizedTitle);
 	}
 }
